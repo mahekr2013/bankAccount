@@ -1,0 +1,54 @@
+import streamlit as st
+
+passwords = {"alice123":"pAssword", "bob_smith":"bobpass", "charlie_p":"mypass5"}
+balances = {"alice123":1500.00, "bob_smith":3.00, "charlie_p":0.00}
+
+st.title("Welcome to the Bank!")
+
+username = st.text_input("Username:")
+password = st.text_input("Password:")
+
+if st.button("Log In"):
+    if username in passwords and passwords[username] == password:
+        st.write("Welcome " + username + "!")
+        st.write("Your current balance is $" + str(balances[username]))
+
+        st.write("What would you like to do?")
+
+        if st.button("1. Make a deposit"):
+            st.write("Enter your deposit below.")
+
+        deposit = st.number_input("Deposit amount:")
+        if st.button("Confirm Deposit"):
+            balances[username] += float(deposit)
+            st.write("Your balance is now $" + str(balances[username]))
+
+        st.write("2. Make a withdrawal")
+        withdrawal = st.number_input("Withdrawal amount:")
+        if st.button("Confirm Withdrawal"):
+            if withdrawal <= balances[username]:
+                balances[username] -= float(withdrawal)
+                st.write("Your balance is now $" + str(balances[username]))
+            else:
+                st.write("You do not have enough money!")
+
+        st.write("3. Change your password")
+        newpassword = st.text_input("Enter your new password:")
+        if st.button("Change Password"):
+            if newpassword != "":
+                passwords[username] = newpassword
+                st.write("Your password has been changed!")
+            else:
+                st.write("Your password cannot be empty.")
+
+        st.write("4. Add interest")
+        if st.button("Add 5% Interest"):
+            balances[username] *= 1.05
+            st.write("Your balance after 5% interest is $" + str(balances[username]))
+
+        st.write("5. Log out")
+        if st.button("Log Out"):
+            st.write("Logging out.")
+
+    else:
+        st.write("Incorrect username or password.")
